@@ -33,6 +33,4 @@ Update-Database
 Lancer l'application
 Définissez Library.Web comme projet de démarrage.
 Appuyez sur F5.
-📁 Structure des Dossiers
-LibraryManager/├── Library.DAL/           # Accès aux données (Entities, Context, Repositories)├── Library.BL/            # Logique métier (Services, DTOs, Interfaces)├── Library.Web/           # Application Web MVC (Controllers, Views)├── LibraryManager.slnx    # Fichier de solution principal└── README.md
-  
+
