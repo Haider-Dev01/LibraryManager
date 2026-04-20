@@ -1,0 +1,81 @@
+@model Library.Web.Models.BookViewModel
+@{
+    ViewData["Title"] = "Ajouter un Livre";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-white py-4 text-center border-0">
+                <div class="bg-primary-subtle d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="fas fa-book text-primary fs-2"></i>
+                </div>
+                <h3 class="fw-bold">Nouveau Livre</h3>
+                <p class="text-muted small">Enregistrez un nouvel ouvrage dans votre bibliothèque</p>
+            </div>
+            <div class="card-body px-5 pb-5">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-heading text-muted"></i></span>
+                            <input asp-for="Title" class="form-control border-start-0 ps-0" placeholder="Ex: Clean Code" />
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Author" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-user-edit text-muted"></i></span>
+                                <input asp-for="Author" class="form-control border-start-0 ps-0" placeholder="Ex: Robert C. Martin" />
+                            </div>
+                            <span asp-validation-for="Author" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Genre" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-tags text-muted"></i></span>
+                                <input asp-for="Genre" class="form-control border-start-0 ps-0" placeholder="Ex: Informatique" />
+                            </div>
+                            <span asp-validation-for="Genre" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="ISBN" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-barcode text-muted"></i></span>
+                                <input asp-for="ISBN" class="form-control border-start-0 ps-0" placeholder="Ex: 978-0132350884" />
+                            </div>
+                            <span asp-validation-for="ISBN" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PublicationYear" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-calendar text-muted"></i></span>
+                                <input asp-for="PublicationYear" class="form-control border-start-0 ps-0" />
+                            </div>
+                            <span asp-validation-for="PublicationYear" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                        <a asp-action="Index" class="btn btn-light px-4 border">Annuler</a>
+                        <button type="submit" class="btn btn-primary px-5">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

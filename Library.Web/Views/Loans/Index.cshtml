@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Library.Web.Models.LoanViewModel>
+@{
+    ViewData["Title"] = "Gestion des Emprunts";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-hand-holding me-2"></i>Emprunts</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus me-1"></i>Nouvel Emprunt
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Livre</th>
+                    <th>Emprunteur</th>
+                    <th>Email</th>
+                    <th>Date emprunt</th>
+                    <th>Retour prévu</th>
+                    <th>Durée</th>
+                    <th>Statut</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var loan in Model)
+                {
+                    <tr class="@(!loan.IsReturned && loan.DaysOnLoan > 14 ? "table-danger" : "")">
+                        <td>
+                            <strong>@loan.BookTitle</strong>
+                            <br /><small class="text-muted">@loan.BookAuthor</small>
+                        </td>
+                        <td>@loan.BorrowerName</td>
+                        <td><small>@loan.BorrowerEmail</small></td>
+                        <td>@loan.LoanDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @(loan.ReturnDate.HasValue
+                                ? loan.ReturnDate.Value.ToString("dd/MM/yyyy")
+                                : "<em class='text-muted'>Non définie</em>")
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">@loan.DaysOnLoan j</span>
+                        </td>
+                        <td>
+                            @if (loan.IsReturned)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Retourné</span>
+                            }
+                            else if (loan.DaysOnLoan > 14)
+                            {
+                                <span class="badge bg-danger"><i class="fas fa-exclamation me-1"></i>En retard</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">En cours</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                @if (!loan.IsReturned)
+                                {
+                                    <form asp-action="Return" asp-route-id="@loan.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-success" title="Marquer retourné"
+                                                onclick="return confirm('Confirmer le retour ?')">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                    </form>
+                                }
+                                <a asp-action="Delete" asp-route-id="@loan.Id"
+                                       class="btn btn-outline-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

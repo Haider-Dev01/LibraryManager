@@ -1,0 +1,9 @@
+# Fichiers Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+.dockerignore
+
+

@@ -1,0 +1,68 @@
+@model Library.BL.DTOs.LoanDto
+@{
+    ViewData["Title"] = "Nouvel Emprunt";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-white py-4 text-center border-0">
+                <div class="bg-warning-subtle d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="fas fa-hand-holding text-warning fs-2"></i>
+                </div>
+                <h3 class="fw-bold">Nouvel Emprunt</h3>
+                <p class="text-muted small">Prêtez un livre à un membre de la bibliothèque</p>
+            </div>
+            <div class="card-body px-5 pb-5">
+                <form asp-controller="Loans" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Sélectionner le Livre</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-book text-muted"></i></span>
+                            <select name="BookId" class="form-select" required>
+                                <option value="">-- Choisir un livre --</option>
+                                @foreach (var book in (IEnumerable<Library.BL.DTOs.BookDto>)ViewBag.Books)
+                                {
+                                    <option value="@book.Id">@book.Title (@book.Author)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Nom de l'Emprunteur</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
+                            <input name="BorrowerName" class="form-control" placeholder="Nom complet" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Email de l'Emprunteur</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-envelope text-muted"></i></span>
+                            <input name="BorrowerEmail" type="email" class="form-control" placeholder="email@exemple.com" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Date d'Emprunt</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-calendar-alt text-muted"></i></span>
+                            <input name="LoanDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                        <a asp-controller="Loans" asp-action="Index" class="btn btn-light px-4 border">Annuler</a>
+                        <button type="submit" class="btn btn-warning px-5 fw-bold">
+                            <i class="fas fa-check-circle me-2"></i>Valider l'Emprunt
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

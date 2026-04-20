@@ -1,0 +1,175 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="hero-section text-center position-relative overflow-hidden mb-5 p-5">
+    <div class="position-relative z-1">
+        <h1 class="display-4 fw-800 mb-2">Bienvenue sur <span class="text-primary">BiblioTech</span></h1>
+        <p class="lead opacity-75 mb-4">Gérez votre collection de livres et vos emprunts avec une interface élégante et performante.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Books" asp-action="Index" class="btn btn-light px-4">
+                <i class="fas fa-search me-2"></i>Explorer les livres
+            </a>
+            <a asp-controller="Loans" asp-action="Create" class="btn btn-primary px-4">
+                <i class="fas fa-plus me-2"></i>Nouvel Emprunt
+            </a>
+        </div>
+    </div>
+    <i class="fas fa-book-open position-absolute" style="font-size: 20rem; right: -50px; bottom: -50px; opacity: 0.05; transform: rotate(-15deg);"></i>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card stat-card border-0 h-100">
+            <div class="card-body">
+                <div class="stat-label">Total Livres</div>
+                <div class="stat-value text-primary">@ViewBag.TotalBooks</div>
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar" role="progressbar" style="width: 100%"></div>
+                </div>
+                <i class="fas fa-book"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-0 h-100">
+            <div class="card-body">
+                <div class="stat-label">Disponibles</div>
+                <div class="stat-value text-success">@ViewBag.AvailableBooks</div>
+                @{
+                    var availablePercent = ViewBag.TotalBooks > 0 ? (double)ViewBag.AvailableBooks / ViewBag.TotalBooks * 100 : 0;
+                }
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @availablePercent%"></div>
+                </div>
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-0 h-100">
+            <div class="card-body">
+                <div class="stat-label">Emprunts Actifs</div>
+                <div class="stat-value text-warning">@ViewBag.ActiveLoans</div>
+                @{
+                    var activePercent = ViewBag.TotalBooks > 0 ? (double)ViewBag.ActiveLoans / ViewBag.TotalBooks * 100 : 0;
+                }
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @activePercent%"></div>
+                </div>
+                <i class="fas fa-hand-holding"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-0 h-100">
+            <div class="card-body">
+                <div class="stat-label">Total Emprunts</div>
+                <div class="stat-value text-info">@ViewBag.TotalLoans</div>
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+                </div>
+                <i class="fas fa-history"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-clock me-2 text-primary"></i>Emprunts Récents</h5>
+                <a asp-controller="Loans" asp-action="Index" class="btn btn-sm btn-outline-primary">Voir tout</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Livre</th>
+                                <th>Emprunteur</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentLoans != null)
+                            {
+                                foreach (var loan in ViewBag.RecentLoans)
+                                {
+                                    <tr>
+                                        <td class="fw-600">@loan.BookTitle</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                                    <i class="fas fa-user text-secondary" style="font-size: 0.8rem;"></i>
+                                                </div>
+                                                @loan.BorrowerName
+                                            </div>
+                                        </td>
+                                        <td class="text-muted small">@loan.LoanDate.ToString("dd MMM yyyy")</td>
+                                        <td>
+                                            @if (loan.IsReturned)
+                                            {
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">Retourné</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">En cours</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">Aucun emprunt récent enregistré.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm bg-primary text-white mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Actions Rapides</h5>
+                <div class="d-grid gap-2">
+                    <a asp-controller="Books" asp-action="Create" class="btn btn-light text-primary text-start">
+                        <i class="fas fa-plus-circle me-2"></i> Ajouter un livre
+                    </a>
+                    <a asp-controller="Loans" asp-action="Create" class="btn btn-light text-primary text-start">
+                        <i class="fas fa-hand-holding-heart me-2"></i> Nouveau prêt
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h6 class="fw-bold text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">Info Système</h6>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-subtle rounded-3 p-2 me-3">
+                        <i class="fas fa-calendar-alt text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="small text-muted">Date Actuelle</div>
+                        <div class="fw-bold">@DateTime.Now.ToString("dd MMMM yyyy")</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-info-subtle rounded-3 p-2 me-3">
+                        <i class="fas fa-database text-info"></i>
+                    </div>
+                    <div>
+                        <div class="small text-muted">Base de données</div>
+                        <div class="fw-bold text-success">Connectée</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

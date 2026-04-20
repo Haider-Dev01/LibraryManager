@@ -1,0 +1,50 @@
+﻿@model Library.Web.Models.LoanViewModel
+@{
+    ViewData["Title"] = "Supprimer un Emprunt";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-trash me-2"></i>Supprimer l'Emprunt</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Vous ne pouvez supprimer que les emprunts dont le livre a été <strong>retourné</strong>.
+                </div>
+                <dl class="row">
+                    <dt class="col-sm-4">Livre</dt>
+                    <dd class="col-sm-8">@Model.BookTitle</dd>
+                    <dt class="col-sm-4">Emprunteur</dt>
+                    <dd class="col-sm-8">@Model.BorrowerName</dd>
+                    <dt class="col-sm-4">Date emprunt</dt>
+                    <dd class="col-sm-8">@Model.LoanDate.ToString("dd/MM/yyyy")</dd>
+                    <dt class="col-sm-4">Statut</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsReturned)
+                        {
+                            <span class="badge bg-success">Retourné</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">En cours</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer d-flex gap-2">
+                <form asp-action="Delete">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Supprimer
+                    </button>
+                </form>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>Annuler
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
